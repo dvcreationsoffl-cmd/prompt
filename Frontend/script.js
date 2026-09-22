@@ -308,15 +308,15 @@ function showSection(sectionId) {
     });
 
     const titles = {
-        dashboard: "Campus Dashboard",
-        events: "Events Directory & Catalog",
-        calendar: "Campus Schedule Calendar",
-        "my-registrations": "My Registered Events",
-        attendance: "Attendance & Check-In Hub",
-        announcements: "Campus Notices & Advisories",
-        reports: "Event Analytics & Reports",
+        dashboard: "Dashboard",
+        events: "Events",
+        calendar: "Calendar",
+        "my-registrations": "My Registrations",
+        attendance: "Attendance",
+        announcements: "Notices",
+        reports: "Reports",
     };
-    document.getElementById("header-section-title").textContent = titles[sectionId] || "Campus Dashboard";
+    document.getElementById("header-section-title").textContent = titles[sectionId] || "Dashboard";
     closeSidebar();
 
     if (sectionId === "calendar") renderCalendar();
@@ -368,12 +368,13 @@ function renderDashboardFeatured(category = "All") {
                 </div>
                 <h4 class="mini-card-name">${escapeHtml(ev.name)}</h4>
                 <div class="mini-card-meta">
-                    <span>📅 ${escapeHtml(formatDate(ev.event_date))}</span>
-                    <span>📍 ${escapeHtml(ev.venue)}</span>
+                    <span>${escapeHtml(formatDate(ev.event_date))}</span>
+                    <span class="meta-dot">•</span>
+                    <span>${escapeHtml(ev.venue)}</span>
                 </div>
                 <div class="mini-card-capacity">
                     <span>${ev.registrations} / ${ev.max_capacity} Seats</span>
-                    <span style="color: var(--primary); font-weight: 700;">${pct}% full</span>
+                    <span class="capacity-pct-label">${pct}%</span>
                 </div>
                 <div class="meter-track">
                     <div class="meter-fill" style="width: ${pct}%"></div>
@@ -485,7 +486,8 @@ function renderEventsGrid() {
                 <div class="card-top-banner">
                     <span class="category-tag">${escapeHtml(ev.category)}</span>
                     <div class="event-date-badge">
-                        <span>📅 ${escapeHtml(formatDate(ev.event_date))}</span>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        <span>${escapeHtml(formatDate(ev.event_date))}</span>
                     </div>
                 </div>
 
@@ -494,20 +496,23 @@ function renderEventsGrid() {
                     <p class="event-card-desc">${escapeHtml(ev.description || "No description provided.")}</p>
 
                     <div class="event-details-tags">
-                        <div class="tag-row">
-                            <span>📍 <strong>Venue:</strong> ${escapeHtml(ev.venue)}</span>
+                        <div class="tag-row" title="Venue">
+                            <svg class="meta-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                            <span>${escapeHtml(ev.venue)}</span>
                         </div>
-                        <div class="tag-row">
-                            <span>⏰ <strong>Time:</strong> ${escapeHtml(ev.time_range)}</span>
+                        <div class="tag-row" title="Schedule">
+                            <svg class="meta-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                            <span>${escapeHtml(ev.time_range)}</span>
                         </div>
-                        <div class="tag-row">
-                            <span>🏛️ <strong>Dept:</strong> ${escapeHtml(ev.department)}</span>
+                        <div class="tag-row" title="Department">
+                            <svg class="meta-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21V5a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v16"></path><path d="M9 21v-4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v4"></path></svg>
+                            <span>${escapeHtml(ev.department)}</span>
                         </div>
                     </div>
 
                     <div class="capacity-meter-wrap">
                         <div class="meter-labels">
-                            <span>${ev.registrations} / ${ev.max_capacity} Seats Enrolled</span>
+                            <span>${ev.registrations} / ${ev.max_capacity} registered</span>
                             <strong>${pct}%</strong>
                         </div>
                         <div class="meter-track">
@@ -549,7 +554,7 @@ function renderEventsTable() {
             </td>
             <td>
                 <span class="category-tag">${escapeHtml(ev.category)}</span>
-                <div style="font-size: 11px; color: var(--muted); margin-top: 4px;">📍 ${escapeHtml(ev.venue)}</div>
+                <div style="font-size: 11px; color: var(--muted); margin-top: 4px;">${escapeHtml(ev.venue)}</div>
             </td>
             <td>
                 ${escapeHtml(formatDate(ev.event_date))}
@@ -574,16 +579,16 @@ async function loadMyRegistrations() {
 
     const tbody = document.getElementById("my-registrations-table");
     if (!myRegistrationsCache.length) {
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 40px;" class="empty-state">You have not registered for any events yet. Browse the Events Hub to get started!</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" style="text-align: center; padding: 40px;" class="empty-state">You have not registered for any events yet. Browse the Events Directory to get started.</td></tr>`;
         return;
     }
 
     tbody.innerHTML = myRegistrationsCache
         .map((reg) => {
             const isAttended = reg.attendance_status === "present";
-            let certAction = `<span style="color: var(--muted); font-size: 12px;">Verified attendance required</span>`;
+            let certAction = `<span style="color: var(--muted); font-size: 12px;">Attendance required</span>`;
             if (isAttended) {
-                certAction = `<button type="button" class="primary-btn" style="padding: 6px 12px; font-size: 12px;" onclick="viewCertificate(${reg.id})">🎓 View Certificate</button>`;
+                certAction = `<button type="button" class="primary-btn" style="padding: 5px 12px; font-size: 12px;" onclick="viewCertificate(${reg.id})">View Certificate</button>`;
             }
 
             let unregisterBtn = "";
@@ -1480,11 +1485,320 @@ document.addEventListener("keydown", (e) => {
         announcementModal.classList.add("hidden");
         certificateModal.classList.add("hidden");
         closeSidebar();
+        closeAiAssistant();
     }
 });
 
+/* =============================================================
+ * AI Assistant & Recommendations Client
+ * =========================================================== */
+let aiChatHistory = [];
+let isAiGenerating = false;
+
+const aiLauncher = document.getElementById("ai-chat-launcher");
+const aiPanel = document.getElementById("ai-assistant-panel");
+const aiCloseBtn = document.getElementById("ai-close-panel-btn");
+const aiClearBtn = document.getElementById("ai-clear-chat-btn");
+const aiForm = document.getElementById("ai-input-form");
+const aiInput = document.getElementById("ai-user-input");
+const aiSendBtn = document.getElementById("ai-send-btn");
+const aiMessagesContainer = document.getElementById("ai-messages-container");
+const sidebarAiBtn = document.getElementById("sidebar-ai-btn");
+const heroAiBtn = document.getElementById("hero-ai-recommendations-btn");
+const eventsAiBtn = document.getElementById("events-ai-recommend-btn");
+
+function formatAiMarkdown(text) {
+    if (!text) return "";
+    let safe = escapeHtml(text);
+    
+    // Bold **text**
+    safe = safe.replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>");
+    // Italic *text*
+    safe = safe.replace(/\*(.*?)\*/g, "<em>$1</em>");
+    
+    // Process paragraphs and lists
+    const lines = safe.split("\n");
+    let inList = false;
+    let html = "";
+    
+    for (let i = 0; i < lines.length; i++) {
+        let line = lines[i].trim();
+        if (!line) {
+            if (inList) {
+                html += "</ul>";
+                inList = false;
+            }
+            continue;
+        }
+        
+        // Bullet point
+        if (line.startsWith("• ") || line.startsWith("- ") || line.startsWith("* ")) {
+            if (!inList) {
+                html += "<ul>";
+                inList = true;
+            }
+            html += `<li>${line.substring(2).trim()}</li>`;
+        } else if (/^\d+\.\s/.test(line)) {
+            if (!inList) {
+                html += "<ul>";
+                inList = true;
+            }
+            html += `<li>${line.replace(/^\d+\.\s*/, "").trim()}</li>`;
+        } else {
+            if (inList) {
+                html += "</ul>";
+                inList = false;
+            }
+            html += `<p>${line}</p>`;
+        }
+    }
+    if (inList) {
+        html += "</ul>";
+    }
+    return html;
+}
+
+function openAiAssistant(initialPrompt = null) {
+    if (!aiPanel) return;
+    aiPanel.classList.remove("hidden");
+    if (aiChatHistory.length === 0) {
+        showAiWelcomeMessage();
+    }
+    if (initialPrompt) {
+        aiInput.value = initialPrompt;
+        handleAiSubmit();
+    } else {
+        setTimeout(() => aiInput?.focus(), 150);
+    }
+}
+
+function closeAiAssistant() {
+    if (!aiPanel) return;
+    aiPanel.classList.add("hidden");
+}
+
+function toggleAiAssistant() {
+    if (!aiPanel) return;
+    if (aiPanel.classList.contains("hidden")) {
+        openAiAssistant();
+    } else {
+        closeAiAssistant();
+    }
+}
+
+function showAiWelcomeMessage() {
+    if (!aiMessagesContainer) return;
+    aiMessagesContainer.innerHTML = "";
+    const userName = currentUser ? currentUser.name.split(" ")[0] : "Student";
+    const dept = currentUser?.department ? ` (${currentUser.department})` : "";
+    const welcomeText = `Hello **${userName}**${dept}! I am your **CampusConnect AI Assistant**.\n\nI have real-time access to all campus events, seat capacity, notices, and certificate criteria. How can I help you today?`;
+    renderAiMessage("assistant", welcomeText, []);
+}
+
+function renderAiMessage(role, text, recommendedEvents = []) {
+    if (!aiMessagesContainer) return;
+    const msgDiv = document.createElement("div");
+    msgDiv.className = `ai-msg ${role}`;
+
+    const timeStr = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+    let cardsHtml = "";
+    if (recommendedEvents && recommendedEvents.length > 0) {
+        cardsHtml = `<div class="ai-recommended-cards">`;
+        recommendedEvents.forEach((ev) => {
+            const isReg = currentUser && eventsCache.some((e) => e.id === ev.id && e.is_registered);
+            const regBtn = isReg
+                ? `<span style="font-size: 11px; font-weight: 600; color: #10b981;">✓ Registered</span>`
+                : ev.available_seats > 0
+                ? `<button type="button" class="ai-card-btn primary" onclick="quickRegisterFromAi(${ev.id})">Register</button>`
+                : `<span style="font-size: 11px; color: #ef4444; font-weight: 600;">Full</span>`;
+
+            cardsHtml += `
+                <div class="ai-event-card">
+                    <div class="ai-event-card-top">
+                        <span class="ai-event-badge">${escapeHtml(ev.category || "Event")}</span>
+                        <span class="ai-event-seats">${ev.available_seats} seats remaining</span>
+                    </div>
+                    <h5 class="ai-event-title">${escapeHtml(ev.name)}</h5>
+                    <div class="ai-event-meta">
+                        <span>📅 ${escapeHtml(formatDate(ev.event_date))}</span>
+                        <span>📍 ${escapeHtml(ev.venue || "Campus")}</span>
+                    </div>
+                    <div class="ai-event-actions">
+                        <button type="button" class="ai-card-btn secondary" onclick="openEventDetails(${ev.id})">View Details</button>
+                        ${regBtn}
+                    </div>
+                </div>
+            `;
+        });
+        cardsHtml += `</div>`;
+    }
+
+    msgDiv.innerHTML = `
+        <div class="ai-msg-bubble">
+            ${role === "assistant" ? formatAiMarkdown(text) : escapeHtml(text)}
+            ${cardsHtml}
+        </div>
+        <span class="ai-msg-time">${timeStr}</span>
+    `;
+
+    aiMessagesContainer.appendChild(msgDiv);
+    aiMessagesContainer.scrollTop = aiMessagesContainer.scrollHeight;
+}
+
+window.quickRegisterFromAi = async function (eventId) {
+    await quickRegisterEvent(eventId);
+    sendAiMessage(`I just registered for event #${eventId}. What should I know about attendance and the certificate?`);
+};
+
+function showAiTypingIndicator() {
+    const typing = document.createElement("div");
+    typing.id = "ai-typing-indicator";
+    typing.className = "ai-typing-indicator";
+    typing.innerHTML = `
+        <span class="ai-typing-dot"></span>
+        <span class="ai-typing-dot"></span>
+        <span class="ai-typing-dot"></span>
+    `;
+    aiMessagesContainer.appendChild(typing);
+    aiMessagesContainer.scrollTop = aiMessagesContainer.scrollHeight;
+}
+
+function removeAiTypingIndicator() {
+    const indicator = document.getElementById("ai-typing-indicator");
+    if (indicator) indicator.remove();
+}
+
+async function sendAiMessage(messageText) {
+    if (!messageText || isAiGenerating) return;
+    const text = messageText.trim();
+    if (!text) return;
+
+    isAiGenerating = true;
+    if (aiSendBtn) aiSendBtn.disabled = true;
+    if (aiInput) aiInput.value = "";
+
+    // 1. Render user message
+    renderAiMessage("user", text);
+    aiChatHistory.push({ role: "user", text });
+
+    // 2. Show typing indicator
+    showAiTypingIndicator();
+
+    try {
+        const payload = {
+            message: text,
+            history: aiChatHistory.slice(-6),
+        };
+        const res = await api("/api/ai/assistant", {
+            method: "POST",
+            body: JSON.stringify(payload),
+        });
+
+        removeAiTypingIndicator();
+
+        const reply = res.reply || "I analyzed our event database for you.";
+        const events = res.events || [];
+
+        renderAiMessage("assistant", reply, events);
+        aiChatHistory.push({ role: "model", text: reply });
+    } catch (err) {
+        removeAiTypingIndicator();
+        renderAiMessage(
+            "assistant",
+            "Sorry, I encountered an issue retrieving that campus information. Please try again or ask for general event recommendations."
+        );
+    } finally {
+        isAiGenerating = false;
+        if (aiSendBtn) aiSendBtn.disabled = false;
+        setTimeout(() => aiInput?.focus(), 100);
+    }
+}
+
+function handleAiSubmit(e) {
+    if (e) e.preventDefault();
+    const val = aiInput?.value;
+    if (val) sendAiMessage(val);
+}
+
+function clearAiChat() {
+    aiChatHistory = [];
+    showAiWelcomeMessage();
+}
+
+function setupAiAssistantListeners() {
+    if (aiLauncher) {
+        aiLauncher.addEventListener("click", toggleAiAssistant);
+    }
+    if (aiCloseBtn) {
+        aiCloseBtn.addEventListener("click", closeAiAssistant);
+    }
+    if (aiClearBtn) {
+        aiClearBtn.addEventListener("click", clearAiChat);
+    }
+    if (aiForm) {
+        aiForm.addEventListener("submit", handleAiSubmit);
+    }
+    if (sidebarAiBtn) {
+        sidebarAiBtn.addEventListener("click", () => {
+            closeSidebar();
+            openAiAssistant();
+        });
+    }
+    if (heroAiBtn) {
+        heroAiBtn.addEventListener("click", () => {
+            openAiAssistant("Recommend the best upcoming campus events for me based on my department");
+        });
+    }
+    if (eventsAiBtn) {
+        eventsAiBtn.addEventListener("click", () => {
+            openAiAssistant("Recommend top events currently scheduled with open seats");
+        });
+    }
+
+    // Quick prompts
+    document.querySelectorAll(".ai-prompt-chip").forEach((chip) => {
+        chip.addEventListener("click", () => {
+            const prompt = chip.getAttribute("data-prompt");
+            if (prompt) {
+                sendAiMessage(prompt);
+            }
+        });
+    });
+}
+
+/* System / Supabase Status */
+async function checkSystemStatus() {
+    try {
+        const res = await fetch("/api/system/status");
+        if (res.ok) {
+            const data = await res.json();
+            const label = document.getElementById("db-status-label");
+            const pill = document.getElementById("db-status-pill");
+            if (label && pill) {
+                if (data.connected) {
+                    label.textContent = "Supabase Live";
+                    pill.className = "db-status-pill connected";
+                    pill.title = `Supabase PostgreSQL Live (${data.supabaseUrl || "Connected"})`;
+                } else if (data.configured) {
+                    label.textContent = "Supabase Connecting";
+                    pill.className = "db-status-pill awaiting";
+                    pill.title = "Supabase configured - Connecting...";
+                } else {
+                    label.textContent = "Supabase Ready";
+                    pill.className = "db-status-pill awaiting";
+                    pill.title = "Supabase Client ready. Add SUPABASE_URL and SUPABASE_ANON_KEY / SUPABASE_SERVICE_ROLE_KEY to connect live.";
+                }
+            }
+        }
+    } catch {
+        // quiet fallback
+    }
+}
+
 /* Session Restoration */
 async function restoreSession() {
+    checkSystemStatus();
     const token = getToken();
     const stored = localStorage.getItem(USER_KEY);
     if (!token || !stored) {
@@ -1506,4 +1820,5 @@ async function restoreSession() {
 }
 
 // Boot
+setupAiAssistantListeners();
 restoreSession();

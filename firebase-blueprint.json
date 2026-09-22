@@ -1,0 +1,121 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Registered student, faculty coordinator, or administrator profile.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "name": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "email": { "type": "string", "format": "email" },
+        "password_hash": { "type": "string" },
+        "role": { "type": "string", "enum": ["student", "faculty", "admin"] },
+        "department": { "type": "string" },
+        "roll_number": { "type": "string" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["id", "name", "email", "password_hash", "role", "department", "created_at"]
+    },
+    "Event": {
+      "title": "Event",
+      "description": "College event, symposium, hackathon, workshop, or fest.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "name": { "type": "string", "minLength": 2, "maxLength": 150 },
+        "event_date": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "venue": { "type": "string" },
+        "time_range": { "type": "string" },
+        "max_capacity": { "type": "number" },
+        "status": { "type": "string", "enum": ["upcoming", "completed", "cancelled"] },
+        "department": { "type": "string" },
+        "created_by": { "type": "number" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["id", "name", "event_date", "category", "venue", "max_capacity", "status", "created_by", "created_at"]
+    },
+    "Registration": {
+      "title": "Registration",
+      "description": "Student event enrollment record.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "user_id": { "type": "number" },
+        "event_id": { "type": "number" },
+        "status": { "type": "string", "enum": ["confirmed", "cancelled"] },
+        "created_at": { "type": "string" }
+      },
+      "required": ["id", "user_id", "event_id", "status", "created_at"]
+    },
+    "Attendance": {
+      "title": "Attendance",
+      "description": "Event attendance verification status for registered student.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "registration_id": { "type": "number" },
+        "status": { "type": "string", "enum": ["present", "absent"] },
+        "marked_by": { "type": "number" },
+        "updated_at": { "type": "string" }
+      },
+      "required": ["id", "registration_id", "status", "marked_by", "updated_at"]
+    },
+    "Feedback": {
+      "title": "Feedback",
+      "description": "Student rating and comment for an attended event.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "event_id": { "type": "number" },
+        "user_id": { "type": "number" },
+        "rating": { "type": "number" },
+        "comment": { "type": "string" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["id", "event_id", "user_id", "rating", "created_at"]
+    },
+    "Announcement": {
+      "title": "Announcement",
+      "description": "Campus bulletin or event advisory.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "number" },
+        "title": { "type": "string", "minLength": 2 },
+        "content": { "type": "string", "minLength": 5 },
+        "category": { "type": "string", "enum": ["Urgent", "General", "Event Update"] },
+        "event_id": { "type": "number" },
+        "created_by": { "type": "number" },
+        "created_at": { "type": "string" }
+      },
+      "required": ["id", "title", "content", "category", "created_by", "created_at"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User accounts including students, faculty, and admins."
+    },
+    "/events/{eventId}": {
+      "schema": "Event",
+      "description": "College events, symposia, hackathons, and cultural fests."
+    },
+    "/registrations/{registrationId}": {
+      "schema": "Registration",
+      "description": "Event enrollment records per student."
+    },
+    "/attendances/{attendanceId}": {
+      "schema": "Attendance",
+      "description": "Attendance status marked by event coordinators."
+    },
+    "/feedbacks/{feedbackId}": {
+      "schema": "Feedback",
+      "description": "Event reviews and 5-star ratings from students."
+    },
+    "/announcements/{announcementId}": {
+      "schema": "Announcement",
+      "description": "Campus-wide and event-specific notice bulletins."
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "campusconnect",
+  "version": "1.0.0",
+  "description": "Centralized college event management system",
+  "type": "module",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "node -e 'console.log(\"Build successful\")'",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@google/genai": "^2.24.0",
+    "@supabase/supabase-js": "^2.116.0",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "firebase": "^12.19.0",
+    "jsonwebtoken": "^9.0.2"
+  }
+}

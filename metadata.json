@@ -1,0 +1,6 @@
+{
+  "name": "CampusConnect",
+  "description": "Centralized college event management system with role-based access, attendance tracking, and verified certificates.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CampusConnect | College Event Management System</title>
+    <meta name="description" content="Centralized college event management system with role-based access, attendance tracking, and verified certificates.">
+    <meta property="og:title" content="CampusConnect">
+    <meta property="og:description" content="Centralized college event management system with role-based access, attendance tracking, and verified certificates.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
@@ -88,8 +91,12 @@
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                     </button>
 
-                    <div class="demo-hints">
-                        <small>💡 Quick demo: Log in with an existing account or create a new student or faculty account.</small>
+                    <div class="demo-hints" style="display: flex; flex-direction: column; gap: 6px;">
+                        <small>💡 Quick demo (password: <code>password123</code>):</small>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <button type="button" class="tag-pill" style="cursor: pointer; border: 1px solid #cbd5e1; background: #f8fafc; padding: 4px 10px; border-radius: 9999px; font-size: 12px; color: #1e293b;" onclick="document.getElementById('login-email').value='student@college.edu';document.getElementById('login-password').value='password123';">Student: student@college.edu</button>
+                            <button type="button" class="tag-pill" style="cursor: pointer; border: 1px solid #cbd5e1; background: #f8fafc; padding: 4px 10px; border-radius: 9999px; font-size: 12px; color: #1e293b;" onclick="document.getElementById('login-email').value='faculty@college.edu';document.getElementById('login-password').value='password123';">Faculty: faculty@college.edu</button>
+                        </div>
                     </div>
                 </form>
 
@@ -166,7 +173,7 @@
                 </div>
             </div>
 
-            <div class="sidebar-user-pill">
+            <div class="sidebar-user-pill" style="display: none;">
                 <div class="avatar" id="sidebar-user-avatar">US</div>
                 <div class="user-pill-details">
                     <span class="user-pill-name" id="sidebar-user-name">User</span>
@@ -175,38 +182,43 @@
             </div>
 
             <nav class="sidebar-nav" aria-label="Main Navigation">
-                <p class="nav-label">Main Navigation</p>
+                <p class="nav-label">Navigation</p>
                 <button type="button" class="nav-item active" data-section="dashboard">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
                     <span>Dashboard</span>
                 </button>
                 <button type="button" class="nav-item" data-section="events">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
-                    <span>Events Hub</span>
+                    <span>Events</span>
                     <span class="nav-badge" id="nav-events-count">0</span>
                 </button>
                 <button type="button" class="nav-item" data-section="calendar">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                    <span>Campus Calendar</span>
+                    <span>Calendar</span>
                 </button>
                 <button type="button" class="nav-item" data-section="my-registrations">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
                     <span>My Registrations</span>
                     <span class="nav-badge highlight" id="nav-my-count">0</span>
                 </button>
+                <button type="button" class="nav-item nav-item-ai" id="sidebar-ai-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                    <span>AI Assistant</span>
+                    <span class="nav-badge ai-badge">Active</span>
+                </button>
                 
-                <p class="nav-label">Staff & Coordination</p>
+                <p class="nav-label">Management</p>
                 <button type="button" class="nav-item" data-section="attendance">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><path d="M9 14l2 2 4-4"></path></svg>
-                    <span>Attendance Hub</span>
+                    <span>Attendance</span>
                 </button>
                 <button type="button" class="nav-item" data-section="announcements">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-                    <span>Campus Notices</span>
+                    <span>Notices</span>
                 </button>
                 <button type="button" class="nav-item" data-section="reports">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-                    <span>Analytics & Reports</span>
+                    <span>Reports</span>
                 </button>
             </nav>
 
@@ -231,12 +243,17 @@
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
                     </button>
                     <div class="header-campus-title">
-                        <span class="campus-sub">METROPOLITAN INSTITUTE OF TECHNOLOGY</span>
-                        <h4 id="header-section-title">Campus Dashboard</h4>
+                        <h4 id="header-section-title">Dashboard</h4>
                     </div>
                 </div>
 
                 <div class="header-right">
+                    <!-- SUPABASE STATUS -->
+                    <div class="db-status-pill awaiting" id="db-status-pill" title="Supabase DB Ready (Awaiting API Keys in settings)">
+                        <span class="db-status-dot"></span>
+                        <span id="db-status-label">Supabase Ready</span>
+                    </div>
+
                     <!-- ROLE PREVIEW SWITCHER (FOR EASY DEMOING) -->
                     <div class="role-switcher-container" title="Preview UI as another role">
                         <span class="role-switcher-label">View As:</span>
@@ -295,6 +312,9 @@
                                 </button>
                                 <button type="button" class="quick-shortcut-chip" data-section-target="my-registrations">
                                     <span>🎓 My E-Certificates</span>
+                                </button>
+                                <button type="button" class="quick-shortcut-chip ai-shortcut-chip" id="hero-ai-recommendations-btn">
+                                    <span>✨ AI Recommendations</span>
                                 </button>
                             </div>
                         </div>
@@ -414,22 +434,27 @@
                 <!-- 2. EVENTS CATALOG SECTION -->
                 <section id="events" class="page-section">
                     <div class="section-title-bar">
-                        <div>
-                            <span class="eyebrow-tag">CAMPUS DIRECTORY</span>
-                            <h2>Events Catalog</h2>
-                            <p>Explore technical symposia, cultural festivals, guest lectures, workshops, and sports meets.</p>
+                        <div class="section-heading-group">
+                            <h2>Events Directory</h2>
+                            <p>Browse, filter, and register for campus activities and workshops</p>
                         </div>
-                        <button type="button" class="primary-btn" id="create-event-btn">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                            <span>Create New Event</span>
-                        </button>
+                        <div class="section-title-actions">
+                            <button type="button" class="secondary-btn ai-action-btn" id="events-ai-recommend-btn">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                                <span>AI Recommendations</span>
+                            </button>
+                            <button type="button" class="primary-btn" id="create-event-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                                <span>New Event</span>
+                            </button>
+                        </div>
                     </div>
 
                     <!-- SEARCH & FILTER TOOLBAR -->
                     <div class="catalog-filters-bar">
                         <div class="search-input-wrap">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-                            <input type="search" id="event-search" placeholder="Search by event title, venue, or description...">
+                            <input type="search" id="event-search" placeholder="Search events by title, venue, or keyword...">
                         </div>
 
                         <div class="filter-dropdowns">
@@ -465,13 +490,13 @@
                     <!-- CATEGORY PILLS -->
                     <div class="category-pills-row" id="category-pills">
                         <button type="button" class="category-pill active" data-category="All">All Categories</button>
-                        <button type="button" class="category-pill" data-category="Technical">💻 Technical & Coding</button>
-                        <button type="button" class="category-pill" data-category="Workshop">🛠️ Workshops & Labs</button>
-                        <button type="button" class="category-pill" data-category="Seminar">🎙️ Seminars & Talks</button>
-                        <button type="button" class="category-pill" data-category="Cultural">🎭 Cultural & Arts</button>
-                        <button type="button" class="category-pill" data-category="Sports">⚽ Sports & Athletics</button>
-                        <button type="button" class="category-pill" data-category="Hackathon">🚀 Hackathons</button>
-                        <button type="button" class="category-pill" data-category="Club Activity">🤝 Club Activities</button>
+                        <button type="button" class="category-pill" data-category="Technical">Technical</button>
+                        <button type="button" class="category-pill" data-category="Workshop">Workshops</button>
+                        <button type="button" class="category-pill" data-category="Seminar">Seminars</button>
+                        <button type="button" class="category-pill" data-category="Cultural">Cultural</button>
+                        <button type="button" class="category-pill" data-category="Sports">Sports</button>
+                        <button type="button" class="category-pill" data-category="Hackathon">Hackathons</button>
+                        <button type="button" class="category-pill" data-category="Club Activity">Clubs</button>
                     </div>
 
                     <!-- GRID VIEW OF EVENTS -->
@@ -504,9 +529,8 @@
                 <section id="calendar" class="page-section">
                     <div class="section-title-bar">
                         <div>
-                            <span class="eyebrow-tag">SCHEDULE & TIMELINES</span>
-                            <h2>Campus Calendar</h2>
-                            <p>Monthly visual timeline of college events, deadlines, and workshops.</p>
+                            <h2>Calendar</h2>
+                            <p>Monthly overview of scheduled events and deadlines</p>
                         </div>
                         <div class="calendar-nav-controls">
                             <button type="button" class="secondary-btn" id="cal-prev-month">&larr; Prev</button>
@@ -537,11 +561,10 @@
                 <section id="my-registrations" class="page-section">
                     <div class="section-title-bar">
                         <div>
-                            <span class="eyebrow-tag">STUDENT PORTAL</span>
                             <h2>My Registrations</h2>
-                            <p>Review events you've enrolled in, check your attendance status, and download certificates.</p>
+                            <p>Your registered events, attendance records, and certificates</p>
                         </div>
-                        <button type="button" class="primary-btn" data-section-target="events">Explore More Events</button>
+                        <button type="button" class="primary-btn" data-section-target="events">Browse Events</button>
                     </div>
 
                     <div class="content-card">
@@ -569,14 +592,13 @@
                 <section id="attendance" class="page-section">
                     <div class="section-title-bar">
                         <div>
-                            <span class="eyebrow-tag">EVENT COORDINATION</span>
-                            <h2>Attendance Hub</h2>
-                            <p>Verify attendee check-ins, record present/absent statuses, and export official roll lists to CSV.</p>
+                            <h2>Attendance</h2>
+                            <p>Track check-ins, record student attendance, and export rosters</p>
                         </div>
                         <div class="attendance-top-actions">
                             <button type="button" class="secondary-btn" id="export-attendance-csv-btn">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                                <span>Export Attendee CSV</span>
+                                <span>Export CSV</span>
                             </button>
                         </div>
                     </div>
@@ -650,13 +672,12 @@
                 <section id="announcements" class="page-section">
                     <div class="section-title-bar">
                         <div>
-                            <span class="eyebrow-tag">COMMUNICATIONS</span>
-                            <h2>Campus Notices & Announcements</h2>
-                            <p>Official announcements, schedule updates, and venue advisories.</p>
+                            <h2>Notices</h2>
+                            <p>Official updates and campus announcements</p>
                         </div>
                         <button type="button" class="primary-btn" id="create-notice-btn">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                            <span>Post Campus Notice</span>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                            <span>Post Notice</span>
                         </button>
                     </div>
 
@@ -669,13 +690,12 @@
                 <section id="reports" class="page-section">
                     <div class="section-title-bar">
                         <div>
-                            <span class="eyebrow-tag">ADMIN & AUDIT</span>
-                            <h2>Event Analytics & Reports</h2>
-                            <p>Comprehensive attendance metrics, capacity utilization, and department participation summaries.</p>
+                            <h2>Reports & Analytics</h2>
+                            <p>Attendance rates, capacity metrics, and participation summaries</p>
                         </div>
                         <button type="button" class="primary-btn" id="export-full-report-csv-btn">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-                            <span>Download Full Summary CSV</span>
+                            <span>Export CSV</span>
                         </button>
                     </div>
 
@@ -1082,6 +1102,63 @@
                 </div>
             </form>
         </div>
+    </div>
+
+    <!-- FLOATING AI ASSISTANT LAUNCHER -->
+    <button type="button" id="ai-chat-launcher" class="ai-chat-launcher" title="CampusConnect AI Assistant" aria-label="Open AI Assistant">
+        <div class="ai-launcher-icon-wrap">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path><circle cx="9" cy="10" r="1"></circle><circle cx="15" cy="10" r="1"></circle></svg>
+        </div>
+        <span class="ai-launcher-label">Ask AI</span>
+        <span class="ai-launcher-pulse"></span>
+    </button>
+
+    <!-- AI ASSISTANT PANEL / DRAWER -->
+    <div id="ai-assistant-panel" class="ai-assistant-panel hidden" role="region" aria-label="AI Campus Assistant">
+        <div class="ai-panel-header">
+            <div class="ai-header-left">
+                <div class="ai-avatar-badge">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                </div>
+                <div>
+                    <h4 class="ai-panel-title">CampusConnect AI</h4>
+                    <div class="ai-status-row">
+                        <span class="ai-status-dot"></span>
+                        <span class="ai-status-text">Application data Q&amp;A &bull; Recommendations</span>
+                    </div>
+                </div>
+            </div>
+            <div class="ai-header-actions">
+                <button type="button" id="ai-clear-chat-btn" class="ai-action-icon-btn" title="Clear conversation" aria-label="Clear conversation">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                </button>
+                <button type="button" id="ai-close-panel-btn" class="ai-action-icon-btn" title="Close AI Assistant" aria-label="Close">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- QUICK PROMPTS BAR -->
+        <div class="ai-quick-prompts" id="ai-quick-prompts">
+            <button type="button" class="ai-prompt-chip" data-prompt="Recommend top events for me based on my department">🎯 Recommend for me</button>
+            <button type="button" class="ai-prompt-chip" data-prompt="Which upcoming events have open seats available?">⚡ Open seats</button>
+            <button type="button" class="ai-prompt-chip" data-prompt="What technical events and workshops are scheduled?">💻 Tech workshops</button>
+            <button type="button" class="ai-prompt-chip" data-prompt="How do I become eligible for an official participation certificate?">📜 Certificate rules</button>
+            <button type="button" class="ai-prompt-chip" data-prompt="What are the latest campus notices and urgent announcements?">📢 Latest notices</button>
+        </div>
+
+        <!-- MESSAGES STREAM -->
+        <div class="ai-messages-container" id="ai-messages-container">
+            <!-- Messages rendered dynamically -->
+        </div>
+
+        <!-- INPUT FORM -->
+        <form class="ai-input-form" id="ai-input-form">
+            <input type="text" id="ai-user-input" class="ai-input-field" placeholder="Ask about events, venues, seats, recommendations..." maxlength="400" autocomplete="off" />
+            <button type="submit" id="ai-send-btn" class="ai-send-btn" aria-label="Send message">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
+        </form>
     </div>
 
     <canvas id="confetti-canvas" class="confetti-canvas"></canvas>
