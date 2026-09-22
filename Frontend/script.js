@@ -1113,6 +1113,7 @@ function setStarRating(rating) {
 
 /* PROFILE MODAL */
 function openProfileModal() {
+    closeSidebar();
     document.getElementById("profile-name").value = currentUser?.name || "";
     document.getElementById("profile-email").value = currentUser?.email || "";
     document.getElementById("profile-dept").value = currentUser?.department || "";
@@ -1226,6 +1227,9 @@ document.querySelectorAll(".role-pill-btn").forEach((btn) => {
         loadAttendanceRoster();
         loadAnnouncements();
         showToast(`Viewing interface as ${currentPreviewRole.toUpperCase()}`);
+        if (window.innerWidth <= 768) {
+            closeSidebar();
+        }
     });
 });
 
@@ -1262,6 +1266,10 @@ document.getElementById("menu-toggle").addEventListener("click", () => {
     sidebar.classList.toggle("open");
     sidebarBackdrop.hidden = !sidebar.classList.contains("open");
 });
+const sidebarCloseBtn = document.getElementById("sidebar-close-btn");
+if (sidebarCloseBtn) {
+    sidebarCloseBtn.addEventListener("click", closeSidebar);
+}
 sidebarBackdrop.addEventListener("click", closeSidebar);
 
 // Event Filters & Search

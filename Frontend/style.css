@@ -512,6 +512,60 @@ input:focus, select:focus, textarea:focus {
     color: #fff;
 }
 
+.sidebar-close-btn {
+    display: none;
+    margin-left: auto;
+    background: transparent;
+    border: none;
+    color: #cbd5e1;
+    font-size: 26px;
+    line-height: 1;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-sm);
+    transition: all 140ms ease;
+}
+
+.sidebar-close-btn:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-mobile-role-switcher {
+    display: none;
+    padding: 10px 14px;
+    margin: 12px 14px 4px 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--sidebar-border);
+    border-radius: var(--radius-sm);
+}
+
+.sidebar-role-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
+}
+
+.sidebar-role-pills {
+    display: flex;
+    gap: 4px;
+}
+
+.sidebar-role-pills .role-pill-btn {
+    flex: 1;
+    text-align: center;
+    padding: 7px 4px;
+    font-size: 11.5px;
+    border: 1px solid transparent;
+}
+
 .sidebar-user-pill {
     margin: 16px;
     padding: 12px;
@@ -2199,85 +2253,6 @@ tr:hover td {
     }
 }
 
-/* ================= RESPONSIVE ================= */
-@media (max-width: 1080px) {
-    .metrics-grid, .reports-summary-cards {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    .dashboard-split-layout {
-        flex-direction: column;
-    }
-    .auth-shell {
-        grid-template-columns: 1fr;
-    }
-    .auth-panel {
-        display: none;
-    }
-}
-
-@media (max-width: 768px) {
-    .sidebar {
-        left: calc(-1 * var(--sidebar-width));
-        transition: left 200ms ease;
-    }
-
-    .sidebar.open {
-        left: 0;
-    }
-
-    .sidebar-backdrop {
-        position: fixed;
-        inset: 0;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 95;
-    }
-
-    .main-area {
-        margin-left: 0;
-    }
-
-    .menu-toggle {
-        display: inline-flex;
-    }
-
-    .header {
-        padding: 0 16px;
-    }
-
-    .content {
-        padding: 16px;
-    }
-
-    .metrics-grid, .reports-summary-cards {
-        grid-template-columns: 1fr;
-    }
-
-    .featured-events-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .catalog-filters-bar {
-        flex-direction: column;
-    }
-
-    .role-switcher-container {
-        display: none;
-    }
-
-    .attendance-selectors-row {
-        flex-direction: column;
-    }
-
-    .ai-assistant-panel {
-        right: 12px;
-        left: 12px;
-        width: auto;
-        bottom: 76px;
-        height: 75vh;
-        max-height: 520px;
-    }
-}
-
 /* ================= AI ASSISTANT STYLES ================= */
 .ai-badge {
     background: #e0f2fe;
@@ -2791,4 +2766,785 @@ tr:hover td {
     height: 100vh;
     pointer-events: none;
     z-index: 99999;
+}
+
+/* ==========================================================================
+   COMPREHENSIVE RESPONSIVE STYLES
+   Breakpoints: 1080px (Tablet Landscape), 768px (Tablet/Mobile), 540px (Mobile), 380px (Compact Mobile)
+   ========================================================================== */
+
+/* ----------------- TABLET LANDSCAPE (<= 1080px) ----------------- */
+@media (max-width: 1080px) {
+    .metrics-grid,
+    .reports-summary-cards {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+    }
+
+    .dashboard-split-layout {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .auth-shell {
+        grid-template-columns: 1fr;
+        max-width: 520px;
+    }
+
+    .auth-panel {
+        display: none;
+    }
+
+    .auth-card {
+        padding: 36px 32px;
+    }
+
+    .events-cards-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+}
+
+/* ----------------- TABLET PORTRAIT & MOBILE (<= 768px) ----------------- */
+@media (max-width: 768px) {
+    /* Layout & Navigation */
+    .sidebar {
+        width: min(280px, 84vw);
+        left: calc(-1 * min(280px, 84vw));
+        transition: left 240ms cubic-bezier(0.16, 1, 0.3, 1);
+        box-shadow: 6px 0 28px rgba(0, 0, 0, 0.28);
+    }
+
+    .sidebar.open {
+        left: 0;
+    }
+
+    .sidebar-close-btn {
+        display: flex;
+    }
+
+    .sidebar-mobile-role-switcher {
+        display: block;
+    }
+
+    .sidebar-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(2px);
+        z-index: 95;
+    }
+
+    .main-area {
+        margin-left: 0;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .menu-toggle {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 44px;
+        min-height: 44px;
+        padding: 10px;
+        border-radius: var(--radius-sm);
+        cursor: pointer;
+    }
+
+    .role-switcher-container {
+        display: none; /* Accessible via mobile sidebar */
+    }
+
+    /* Header */
+    .header {
+        padding: 0 14px;
+        height: 58px;
+        gap: 8px;
+    }
+
+    .header-campus-title h4 {
+        font-size: 15px;
+        max-width: 140px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .header-right {
+        gap: 8px;
+    }
+
+    .db-status-pill {
+        padding: 4px 8px;
+        font-size: 10.5px;
+        gap: 4px;
+    }
+
+    .header-user-badge {
+        gap: 8px;
+    }
+
+    .header-user-info span {
+        display: none;
+    }
+
+    /* Content Padding */
+    .content {
+        padding: 16px 14px;
+    }
+
+    /* Section Title Bars */
+    .section-title-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .section-title-bar h2 {
+        font-size: 19px;
+    }
+
+    .section-title-bar p {
+        font-size: 12.5px;
+    }
+
+    .section-title-bar > button,
+    .section-title-bar > .attendance-top-actions,
+    .section-title-bar > .section-title-actions {
+        width: 100%;
+    }
+
+    .section-title-bar .primary-btn,
+    .section-title-bar .secondary-btn {
+        width: 100%;
+        justify-content: center;
+        min-height: 44px;
+    }
+
+    /* Notices Ticker */
+    .notices-ticker {
+        padding: 9px 14px;
+        font-size: 12px;
+        gap: 8px;
+    }
+
+    .ticker-badge {
+        font-size: 9px;
+        padding: 2px 6px;
+        flex-shrink: 0;
+    }
+
+    .ticker-content {
+        line-height: 1.35;
+        white-space: normal;
+    }
+
+    /* Dashboard Hero */
+    .dashboard-hero {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+        padding: 20px 16px;
+    }
+
+    .hero-text h2 {
+        font-size: 19px;
+    }
+
+    .hero-text p {
+        font-size: 13px;
+    }
+
+    .hero-actions {
+        width: 100%;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .hero-actions .primary-btn,
+    .hero-actions .secondary-btn {
+        width: 100%;
+        justify-content: center;
+        min-height: 44px;
+    }
+
+    .hero-quick-shortcuts {
+        gap: 6px;
+        margin-top: 12px;
+    }
+
+    .quick-shortcut-chip {
+        font-size: 11.5px;
+        padding: 6px 12px;
+        min-height: 36px;
+    }
+
+    /* Grids: Metrics, Featured, Events, Announcements */
+    .metrics-grid,
+    .reports-summary-cards {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .metric-card {
+        padding: 14px 16px;
+    }
+
+    .featured-events-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .events-cards-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .announcements-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    /* Event Card in Grid */
+    .event-card {
+        max-width: 100%;
+    }
+
+    .event-card-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .event-card-actions button {
+        width: 100%;
+        min-height: 42px;
+        justify-content: center;
+    }
+
+    /* Catalog & Filters Bar */
+    .catalog-filters-bar {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+
+    .search-box-wrap {
+        min-width: 100%;
+        width: 100%;
+    }
+
+    .filter-dropdowns {
+        flex-wrap: wrap;
+        width: 100%;
+        gap: 8px;
+    }
+
+    .filter-dropdowns select {
+        flex: 1;
+        min-width: 130px;
+        min-height: 44px;
+    }
+
+    .view-toggle-btns {
+        margin-left: auto;
+    }
+
+    .view-toggle-btns .view-btn {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .category-pills-row {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+        padding-bottom: 6px;
+        gap: 6px;
+    }
+
+    .category-pills-row::-webkit-scrollbar {
+        display: none;
+    }
+
+    .category-pill {
+        flex-shrink: 0;
+        min-height: 36px;
+        padding: 7px 14px;
+        font-size: 12px;
+    }
+
+    /* Attendance Hub */
+    .attendance-filter-card {
+        padding: 16px 14px;
+    }
+
+    .attendance-selectors-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .attendance-selectors-row .form-group {
+        width: 100%;
+    }
+
+    .coordinator-bulk-actions {
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .coordinator-bulk-actions button {
+        width: 100%;
+        min-height: 44px;
+        justify-content: center;
+    }
+
+    /* Calendar */
+    .calendar-card {
+        padding: 14px 8px;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .calendar-nav-controls {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 6px;
+        width: 100%;
+    }
+
+    .calendar-nav-controls button {
+        min-height: 40px;
+        padding: 8px 12px;
+    }
+
+    .calendar-month-label {
+        font-size: 14px;
+        min-width: 120px;
+        text-align: center;
+    }
+
+    .calendar-weekdays {
+        font-size: 11px;
+        padding: 4px 0;
+    }
+
+    .calendar-day-cell {
+        min-height: 70px;
+        padding: 4px 3px;
+    }
+
+    .cal-day-num {
+        font-size: 11px;
+        margin-bottom: 2px;
+    }
+
+    .cal-event-pill {
+        font-size: 9.5px;
+        padding: 2px 4px;
+        line-height: 1.2;
+        border-radius: 3px;
+        margin-bottom: 2px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .calendar-legend {
+        flex-wrap: wrap;
+        gap: 8px 12px;
+        font-size: 11.5px;
+    }
+
+    /* Tables */
+    .table-wrapper {
+        overflow-x: auto;
+        width: 100%;
+        -webkit-overflow-scrolling: touch;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--border);
+    }
+
+    table {
+        min-width: 620px;
+    }
+
+    #reports-audit-table {
+        min-width: 820px;
+    }
+
+    th, td {
+        padding: 10px 12px;
+        font-size: 12.5px;
+    }
+
+    th {
+        font-size: 10.5px;
+    }
+
+    td .primary-btn,
+    td .secondary-btn,
+    td .ghost-btn {
+        min-height: 38px;
+        padding: 6px 12px;
+        font-size: 12px;
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    /* Modals & Forms */
+    .modal-overlay {
+        padding: 10px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal {
+        padding: 20px 16px;
+        max-height: calc(100vh - 20px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 14px;
+    }
+
+    .modal-header {
+        margin-bottom: 16px;
+        padding-bottom: 12px;
+    }
+
+    .modal-header h3 {
+        font-size: 17px;
+    }
+
+    .modal-close {
+        min-width: 44px;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    /* iOS Safari zoom prevention & touch targets */
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="date"],
+    input[type="search"],
+    input[type="number"],
+    select,
+    textarea {
+        font-size: 16px !important;
+        min-height: 44px;
+    }
+
+    .modal-actions {
+        flex-direction: column-reverse;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .modal-actions button {
+        width: 100%;
+        min-height: 44px;
+        justify-content: center;
+    }
+
+    /* Event Details Modal */
+    .details-meta-cards {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .details-footer-actions {
+        flex-direction: column;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .details-footer-actions button {
+        width: 100%;
+        min-height: 44px;
+        justify-content: center;
+    }
+
+    /* Certificate Modal */
+    .modal-certificate {
+        width: 100%;
+        max-height: calc(100vh - 20px);
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .certificate-modal-header {
+        padding: 12px 14px;
+    }
+
+    .certificate-frame {
+        padding: 12px 8px;
+    }
+
+    .cert-border-outer {
+        padding: 4px;
+        border-width: 2px;
+    }
+
+    .cert-border-inner {
+        padding: 20px 12px;
+    }
+
+    .cert-crest {
+        margin-bottom: 6px;
+    }
+
+    .cert-institution {
+        font-size: 11px;
+        letter-spacing: 0.1em;
+    }
+
+    .cert-portal-name {
+        font-size: 9.5px;
+        margin-bottom: 12px;
+    }
+
+    .cert-main-title {
+        font-size: 22px;
+        margin-bottom: 4px;
+    }
+
+    .cert-sub {
+        font-size: 10.5px;
+        margin-bottom: 16px;
+    }
+
+    .recipient-name {
+        font-size: 20px;
+        padding: 0 10px 4px;
+        margin-bottom: 6px;
+    }
+
+    .recipient-meta {
+        font-size: 11px;
+        margin-bottom: 14px;
+    }
+
+    .cert-event-title {
+        font-size: 16px;
+        margin: 6px 0;
+    }
+
+    .cert-event-meta {
+        font-size: 11px;
+        margin-bottom: 20px;
+    }
+
+    .cert-footer {
+        flex-direction: column;
+        align-items: center;
+        gap: 16px;
+        margin-top: 18px;
+        padding: 0;
+    }
+
+    .seal-circle {
+        width: 64px;
+        height: 64px;
+        font-size: 7.5px;
+    }
+
+    .cert-security-bar {
+        flex-direction: column;
+        gap: 4px;
+        text-align: center;
+        font-size: 9px;
+        margin-top: 16px;
+    }
+
+    /* AI Assistant Drawer & Launcher on Mobile */
+    .ai-assistant-panel {
+        position: fixed !important;
+        inset: 8px 8px 12px 8px !important;
+        width: auto !important;
+        max-width: none !important;
+        height: auto !important;
+        max-height: calc(100vh - 20px) !important;
+        bottom: 8px !important;
+        right: 8px !important;
+        left: 8px !important;
+        border-radius: 16px !important;
+        z-index: 1001 !important;
+    }
+
+    .ai-chat-launcher {
+        bottom: 16px;
+        right: 14px;
+        padding: 10px 14px;
+        font-size: 12.5px;
+        min-height: 44px;
+    }
+
+    .ai-input-form {
+        padding: 8px 10px;
+        gap: 6px;
+    }
+
+    .ai-input-field {
+        font-size: 16px !important;
+        min-height: 44px;
+    }
+
+    .ai-send-btn {
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .ai-prompt-chip {
+        min-height: 32px;
+        padding: 5px 10px;
+        font-size: 11px;
+    }
+
+    /* Auth Screen on Mobile */
+    .auth-card {
+        padding: 24px 18px;
+    }
+
+    .auth-header h3 {
+        font-size: 20px;
+    }
+
+    .auth-tab {
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .demo-credentials {
+        gap: 6px;
+    }
+
+    .demo-credential-btn {
+        min-height: 44px;
+        padding: 8px 10px;
+    }
+}
+
+/* ----------------- COMPACT SMARTPHONES (<= 540px) ----------------- */
+@media (max-width: 540px) {
+    .header-campus-title h4 {
+        font-size: 14px;
+        max-width: 110px;
+    }
+
+    .db-status-pill {
+        display: none; /* Gives room to user badge */
+    }
+
+    .header-user-info strong {
+        font-size: 12px;
+    }
+
+    .header-avatar {
+        width: 32px;
+        height: 32px;
+        font-size: 12px;
+    }
+
+    .star-btn {
+        font-size: 28px;
+        min-width: 44px;
+        min-height: 44px;
+    }
+
+    .hero-top-row {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+
+    .hero-time-badge {
+        font-size: 10px;
+        padding: 2px 8px;
+    }
+
+    .meter-labels {
+        flex-direction: column;
+        gap: 4px;
+        align-items: flex-start;
+    }
+
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+}
+
+/* ----------------- ULTRA-COMPACT MOBILE (<= 380px) ----------------- */
+@media (max-width: 380px) {
+    .content {
+        padding: 12px 8px;
+    }
+
+    .header {
+        padding: 0 10px;
+    }
+
+    .header-user-info {
+        display: none; /* Just show avatar icon on smallest phones */
+    }
+
+    .auth-card {
+        padding: 20px 14px;
+    }
+
+    .college-name {
+        font-size: 20px;
+    }
+
+    .auth-header h3 {
+        font-size: 18px;
+    }
+
+    .section-title-bar h2 {
+        font-size: 17px;
+    }
+
+    .hero-text h2 {
+        font-size: 17px;
+    }
+
+    .metric-card {
+        padding: 12px 14px;
+        gap: 10px;
+    }
+
+    .metric-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+    .metric-value {
+        font-size: 18px;
+    }
+
+    .ai-chat-launcher span {
+        display: none; /* Icon-only launcher for ultra-compact devices */
+    }
+
+    .ai-chat-launcher {
+        padding: 10px;
+        border-radius: 50%;
+        width: 46px;
+        height: 46px;
+        justify-content: center;
+    }
 }
