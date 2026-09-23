@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node server.js",
-    "build": "node -e 'console.log(\"Build successful\")'",
+    "build": "node build.js",
     "start": "node server.js"
   },
   "engines": {

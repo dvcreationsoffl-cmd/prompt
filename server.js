@@ -1936,7 +1936,9 @@ app.get("/api/ai/recommendations", (req, res) => {
 /* -------------------------------------------------------------
  * Static Files & SPA Fallback
  * ----------------------------------------------------------- */
-const frontendDir = path.join(__dirname, "Frontend");
+const frontendDir = fs.existsSync(path.join(__dirname, "public"))
+  ? path.join(__dirname, "public")
+  : path.join(__dirname, "Frontend");
 
 // Dedicated PWA routes with standard headers
 app.get("/sw.js", (req, res) => {
