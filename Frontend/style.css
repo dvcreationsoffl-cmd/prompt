@@ -2768,6 +2768,172 @@ tr:hover td {
     z-index: 99999;
 }
 
+/* ================= PWA UI COMPONENTS ================= */
+.pwa-install-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: linear-gradient(135deg, #059669, #047857);
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 7px 14px;
+    border-radius: var(--radius-sm);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.35);
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.pwa-install-btn:hover {
+    background: linear-gradient(135deg, #10b981, #059669);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(5, 150, 105, 0.45);
+}
+
+.pwa-install-btn:active {
+    transform: translateY(0);
+}
+
+.sidebar-pwa-install-btn {
+    background: rgba(5, 150, 105, 0.15) !important;
+    border: 1px solid rgba(16, 185, 129, 0.35) !important;
+    color: #a7f3d0 !important;
+    font-weight: 700 !important;
+    margin-bottom: 6px !important;
+}
+
+.sidebar-pwa-install-btn:hover {
+    background: rgba(5, 150, 105, 0.28) !important;
+    color: #ffffff !important;
+}
+
+/* Offline Indicator Banner */
+.offline-indicator {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(90deg, #d97706, #b45309);
+    color: #ffffff;
+    padding: 8px 16px;
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    z-index: 100000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+    animation: slideDownBanner 200ms ease;
+}
+
+@keyframes slideDownBanner {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+.offline-pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ffffff;
+    animation: pulseDot 1.4s infinite;
+}
+
+@keyframes pulseDot {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.4;
+        transform: scale(0.75);
+    }
+}
+
+.offline-retry-btn {
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 120ms ease;
+}
+
+.offline-retry-btn:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+/* iOS Install Modal */
+.ios-install-modal {
+    max-width: 420px;
+}
+
+.ios-install-body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 16px 0 24px;
+}
+
+.ios-install-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+}
+
+.ios-install-step .step-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--primary-navy);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.ios-install-step .step-desc {
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--text-secondary);
+}
+
+.ios-install-step .step-desc strong {
+    color: var(--text-primary);
+}
+
+/* Standalone Display Mode adjustments */
+@media all and (display-mode: standalone) {
+    /* Hide install prompt buttons when running as installed standalone app */
+    .pwa-install-btn,
+    .sidebar-pwa-install-btn {
+        display: none !important;
+    }
+    
+    /* Extra top padding for mobile status bar if needed */
+    .header {
+        padding-top: env(safe-area-inset-top, 0);
+    }
+}
+
 /* ==========================================================================
    COMPREHENSIVE RESPONSIVE STYLES
    Breakpoints: 1080px (Tablet Landscape), 768px (Tablet/Mobile), 540px (Mobile), 380px (Compact Mobile)

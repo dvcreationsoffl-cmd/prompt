@@ -101,7 +101,16 @@ async function api(path, options = {}) {
         headers["Content-Type"] = "application/json";
     }
 
-    const response = await fetch(`${API_BASE}${path}`, { ...options, headers });
+    let response;
+    try {
+        response = await fetch(`${API_BASE}${path}`, { ...options, headers });
+    } catch (networkErr) {
+        if (!navigator.onLine) {
+            throw new Error("You are offline. Showing cached campus records where available.");
+        }
+        throw networkErr;
+    }
+
     const contentType = response.headers.get("Content-Type") || "";
 
     if (contentType.includes("text/csv")) {
@@ -1816,17 +1825,186 @@ async function restoreSession() {
     try {
         currentUser = JSON.parse(stored);
         currentPreviewRole = currentUser.role || "student";
-        const me = await api("/api/auth/me");
-        currentUser = me;
-        currentPreviewRole = me.role || "student";
-        localStorage.setItem(USER_KEY, JSON.stringify(me));
+        if (navigator.onLine) {
+            const me = await api("/api/auth/me");
+            currentUser = me;
+            currentPreviewRole = me.role || "student";
+            localStorage.setItem(USER_KEY, JSON.stringify(me));
+        }
         showApplication();
     } catch {
+        if (!navigator.onLine) {
+            // Keep user logged in offline with stored credentials
+            showApplication();
+            return;
+        }
         clearSession();
         showAuth();
     }
 }
 
+/* ==========================================================================
+   PROGRESSIVE WEB APP (PWA) INITIALIZATION & INSTALL PROMPTS
+   ========================================================================== */
+
+let deferredInstallPrompt = null;
+
+function initPWA() {
+    const headerInstallBtn = document.getElementById("header-pwa-install-btn");
+    const sidebarInstallBtn = document.getElementById("sidebar-pwa-install-btn");
+    const offlineIndicator = document.getElementById("offline-indicator");
+    const offlineRetryBtn = document.getElementById("offline-retry-btn");
+    const iosModal = document.getElementById("ios-install-modal");
+    const iosCloseBtn = document.getElementById("ios-install-close");
+    const iosGotItBtn = document.getElementById("ios-install-got-it");
+
+    // 1. Detect Standalone Display Mode
+    const isStandalone =
+        window.matchMedia("(display-mode: standalone)").matches ||
+        window.navigator.standalone === true;
+
+    // Detect iOS devices (iPhone, iPad, iPod)
+    const isIOS = /iphone|ipad|ipod/.test(navigator.userAgent.toLowerCase()) && !window.MSStream;
+
+    function showInstallButtons() {
+        if (isStandalone) return;
+        if (headerInstallBtn) headerInstallBtn.classList.remove("hidden");
+        if (sidebarInstallBtn) sidebarInstallBtn.classList.remove("hidden");
+    }
+
+    function hideInstallButtons() {
+        if (headerInstallBtn) headerInstallBtn.classList.add("hidden");
+        if (sidebarInstallBtn) sidebarInstallBtn.classList.add("hidden");
+    }
+
+    // 2. Register Service Worker
+    if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+            navigator.serviceWorker
+                .register("/sw.js", { scope: "/" })
+                .then((reg) => {
+                    console.log("[PWA] Service Worker registered successfully with scope:", reg.scope);
+
+                    if (reg.waiting) {
+                        reg.waiting.postMessage({ type: "SKIP_WAITING" });
+                    }
+
+                    reg.addEventListener("updatefound", () => {
+                        const newWorker = reg.installing;
+                        if (!newWorker) return;
+                        newWorker.addEventListener("statechange", () => {
+                            if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+                                console.log("[PWA] Service Worker updated.");
+                                showToast("App updated in background! New features ready.", false);
+                            }
+                        });
+                    });
+                })
+                .catch((err) => {
+                    console.warn("[PWA] Service Worker registration failed:", err);
+                });
+        });
+    }
+
+    // 3. Listen for browser 'beforeinstallprompt'
+    window.addEventListener("beforeinstallprompt", (e) => {
+        // Prevent default mini-infobar on mobile Chrome
+        e.preventDefault();
+        deferredInstallPrompt = e;
+        console.log("[PWA] Captured beforeinstallprompt event");
+        showInstallButtons();
+    });
+
+    // 4. Handle in-app install triggers
+    async function triggerInstallFlow() {
+        if (deferredInstallPrompt) {
+            deferredInstallPrompt.prompt();
+            const choiceResult = await deferredInstallPrompt.userChoice;
+            console.log("[PWA] User choice outcome:", choiceResult.outcome);
+            if (choiceResult.outcome === "accepted") {
+                showToast("CampusConnect installed successfully! Launch it anytime from your home screen.", false);
+                hideInstallButtons();
+            }
+            deferredInstallPrompt = null;
+        } else if (isIOS) {
+            if (iosModal) iosModal.classList.remove("hidden");
+        } else {
+            showToast("To install CampusConnect: Click the install icon in your browser address bar or menu.", false);
+        }
+    }
+
+    if (headerInstallBtn) {
+        headerInstallBtn.addEventListener("click", triggerInstallFlow);
+    }
+    if (sidebarInstallBtn) {
+        sidebarInstallBtn.addEventListener("click", triggerInstallFlow);
+    }
+
+    // iOS Modal handlers
+    if (iosCloseBtn && iosModal) {
+        iosCloseBtn.addEventListener("click", () => iosModal.classList.add("hidden"));
+    }
+    if (iosGotItBtn && iosModal) {
+        iosGotItBtn.addEventListener("click", () => iosModal.classList.add("hidden"));
+    }
+    if (iosModal) {
+        iosModal.addEventListener("click", (e) => {
+            if (e.target === iosModal) iosModal.classList.add("hidden");
+        });
+    }
+
+    // If on iOS and not standalone, show install buttons for manual prompt
+    if (isIOS && !isStandalone) {
+        showInstallButtons();
+    }
+
+    // 5. Handle app installed event
+    window.addEventListener("appinstalled", () => {
+        console.log("[PWA] CampusConnect was successfully installed.");
+        hideInstallButtons();
+        showToast("CampusConnect was successfully installed!", false);
+    });
+
+    // 6. Online / Offline Connectivity Monitor
+    function updateOnlineStatus() {
+        if (navigator.onLine) {
+            if (offlineIndicator) offlineIndicator.classList.add("hidden");
+        } else {
+            if (offlineIndicator) offlineIndicator.classList.remove("hidden");
+            showToast("You are offline. Cached campus content is available.", true);
+        }
+    }
+
+    window.addEventListener("online", () => {
+        updateOnlineStatus();
+        showToast("You are back online! Syncing latest campus events...", false);
+        checkSystemStatus();
+        if (currentUser) {
+            loadDashboard();
+            loadEvents();
+        }
+    });
+
+    window.addEventListener("offline", () => {
+        updateOnlineStatus();
+    });
+
+    if (offlineRetryBtn) {
+        offlineRetryBtn.addEventListener("click", async () => {
+            if (navigator.onLine) {
+                showToast("Network detected! Refreshing...", false);
+                location.reload();
+            } else {
+                showToast("Still offline. Please check your WiFi or network connection.", true);
+            }
+        });
+    }
+
+    // Initial check
+    updateOnlineStatus();
+}
+
 // Boot
 setupAiAssistantListeners();
+initPWA();
 restoreSession();

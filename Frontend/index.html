@@ -11,8 +11,26 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+
+    <!-- Progressive Web App (PWA) Manifest & Meta Tags -->
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#0f172a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="CampusConnect">
+    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
 </head>
 <body>
+    <!-- OFFLINE CONNECTIVITY INDICATOR BANNER -->
+    <div id="offline-indicator" class="offline-indicator hidden" role="status" aria-live="polite">
+        <span class="offline-pulse-dot"></span>
+        <span id="offline-indicator-text">Offline Mode — Displaying cached campus data</span>
+        <button type="button" id="offline-retry-btn" class="offline-retry-btn" title="Retry network connection">Retry</button>
+    </div>
+
     <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
 
     <!-- AUTHENTICATION VIEW -->
@@ -233,6 +251,10 @@
             </nav>
 
             <div class="sidebar-bottom">
+                <button type="button" class="sidebar-action-btn sidebar-pwa-install-btn hidden" id="sidebar-pwa-install-btn" title="Install CampusConnect on your device">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                    <span>Install App</span>
+                </button>
                 <button type="button" class="sidebar-action-btn" id="open-profile-btn">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                     <span>My Profile</span>
@@ -258,6 +280,12 @@
                 </div>
 
                 <div class="header-right">
+                    <!-- PWA IN-APP INSTALL BUTTON -->
+                    <button type="button" class="pwa-install-btn hidden" id="header-pwa-install-btn" title="Install CampusConnect on your device">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        <span>Install App</span>
+                    </button>
+
                     <!-- SUPABASE STATUS -->
                     <div class="db-status-pill awaiting" id="db-status-pill" title="Supabase DB Ready (Awaiting API Keys in settings)">
                         <span class="db-status-dot"></span>
@@ -1169,6 +1197,39 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
             </button>
         </form>
+    </div>
+
+    <!-- IOS INSTALL GUIDE MODAL -->
+    <div id="ios-install-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="ios-modal-title">
+        <div class="modal ios-install-modal">
+            <div class="modal-header">
+                <h3 id="ios-modal-title">Install on iPhone / iPad</h3>
+                <button type="button" class="modal-close" id="ios-install-close" aria-label="Close dialog">&times;</button>
+            </div>
+            <div class="ios-install-body">
+                <div class="ios-install-step">
+                    <div class="step-num">1</div>
+                    <div class="step-desc">
+                        Tap the <strong>Share</strong> icon <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:inline;vertical-align:-2px;"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> in Safari's bottom toolbar.
+                    </div>
+                </div>
+                <div class="ios-install-step">
+                    <div class="step-num">2</div>
+                    <div class="step-desc">
+                        Scroll down the menu and tap <strong>Add to Home Screen</strong>.
+                    </div>
+                </div>
+                <div class="ios-install-step">
+                    <div class="step-num">3</div>
+                    <div class="step-desc">
+                        Tap <strong>Add</strong> in the top-right corner to launch CampusConnect in full-screen standalone mode!
+                    </div>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="primary-btn full-width" id="ios-install-got-it">Got It</button>
+            </div>
+        </div>
     </div>
 
     <canvas id="confetti-canvas" class="confetti-canvas"></canvas>

@@ -1,0 +1,79 @@
+{
+  "version": 2,
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "Frontend/**"
+    }
+  },
+  "headers": [
+    {
+      "source": "/sw.js",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/javascript; charset=utf-8"
+        },
+        {
+          "key": "Service-Worker-Allowed",
+          "value": "/"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "no-cache, no-store, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/manifest.webmanifest",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/manifest+json; charset=utf-8"
+        }
+      ]
+    },
+    {
+      "source": "/manifest.json",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/manifest+json; charset=utf-8"
+        }
+      ]
+    }
+  ],
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.js"
+    },
+    {
+      "source": "/sw.js",
+      "destination": "/Frontend/sw.js"
+    },
+    {
+      "source": "/manifest.webmanifest",
+      "destination": "/Frontend/manifest.webmanifest"
+    },
+    {
+      "source": "/manifest.json",
+      "destination": "/Frontend/manifest.json"
+    },
+    {
+      "source": "/icons/(.*)",
+      "destination": "/Frontend/icons/$1"
+    },
+    {
+      "source": "/style.css",
+      "destination": "/Frontend/style.css"
+    },
+    {
+      "source": "/script.js",
+      "destination": "/Frontend/script.js"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/Frontend/index.html"
+    }
+  ]
+}

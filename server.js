@@ -12,6 +12,15 @@ import { GoogleGenAI } from "@google/genai";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Load environment variables from .env file if present
+if (typeof process.loadEnvFile === "function") {
+  try {
+    process.loadEnvFile();
+  } catch {
+    // Silently continue if .env does not exist
+  }
+}
+
 const PORT = 3000;
 const SECRET_KEY = process.env.JWT_SECRET_KEY || "college-events-dev-secret-change-in-production";
 
@@ -1928,6 +1937,20 @@ app.get("/api/ai/recommendations", (req, res) => {
  * Static Files & SPA Fallback
  * ----------------------------------------------------------- */
 const frontendDir = path.join(__dirname, "Frontend");
+
+// Dedicated PWA routes with standard headers
+app.get("/sw.js", (req, res) => {
+  res.setHeader("Content-Type", "application/javascript; charset=utf-8");
+  res.setHeader("Service-Worker-Allowed", "/");
+  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+  res.sendFile(path.join(frontendDir, "sw.js"));
+});
+
+app.get(["/manifest.webmanifest", "/manifest.json"], (req, res) => {
+  res.setHeader("Content-Type", "application/manifest+json; charset=utf-8");
+  res.sendFile(path.join(frontendDir, "manifest.webmanifest"));
+});
+
 app.use(express.static(frontendDir));
 
 app.get("*", (req, res) => {
@@ -1937,6 +1960,10 @@ app.get("*", (req, res) => {
 /* -------------------------------------------------------------
  * Start Server
  * ----------------------------------------------------------- */
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server running on http://0.0.0.0:${PORT}`);
-});
+if (!process.env.VERCEL) {
+  app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server running on http://0.0.0.0:${PORT}`);
+  });
+}
+
+export default app;

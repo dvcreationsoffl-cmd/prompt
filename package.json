@@ -8,6 +8,9 @@
     "build": "node -e 'console.log(\"Build successful\")'",
     "start": "node server.js"
   },
+  "engines": {
+    "node": ">=20.x"
+  },
   "dependencies": {
     "@google/genai": "^2.24.0",
     "@supabase/supabase-js": "^2.116.0",
@@ -16,5 +19,8 @@
     "express": "^4.21.2",
     "firebase": "^12.19.0",
     "jsonwebtoken": "^9.0.2"
+  },
+  "devDependencies": {
+    "pngjs": "^7.0.0"
   }
 }
